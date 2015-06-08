@@ -8,6 +8,22 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="21" />
 
+    <!-- Element Wave -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <permission
+        android:name="com.example.testapp.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.example.testapp.permission.C2D_MESSAGE" />
+    <!-- end Element Wave -->
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -21,6 +37,93 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <!-- Element Wave -->
+        <!-- Send locations updates -->
+        <service
+            android:name="com.elementwave.android.location.LocationService"
+            android:exported="false"
+            android:label="LocationService" >
+            <intent-filter>
+                <action android:name="com.elementwave.android.location.LocationService" >
+                </action>
+            </intent-filter>
+        </service>
+
+        <!-- Control state of the application -->
+        <service
+            android:name="com.elementwave.android.lifecycle.LifecycleService"
+            android:exported="false"
+            android:label="LifecycleService" >
+            <intent-filter>
+                <action android:name="com.elementwave.android.lifecycle.LifecycleService" >
+                </action>
+            </intent-filter>
+        </service>
+
+        <!-- Send messages to ElementWave servers -->
+        <service
+            android:name="com.elementwave.android.messages.sender.MessageSenderService"
+            android:exported="false"
+            android:label="MessageSenderService" >
+            <intent-filter>
+                <action android:name="com.elementwave.android.messages.sender.MessageSenderService" >
+                </action>
+            </intent-filter>
+        </service>
+
+        <!-- Process the push notifications -->
+        <service
+            android:name="com.elementwave.android.gcm.GCMIntentService"
+            android:exported="false" />
+
+        <!-- Receives the push notifications -->
+        <receiver
+            android:name="com.elementwave.android.gcm.GCMBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
+                <category android:name="com.example.testapp" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Receives the registration id when Google play services is not available -->
+        <receiver
+            android:name="com.google.android.gcm.GCMBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="com.example.testapp" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Open the application after receiving a push notification -->
+        <receiver
+            android:name="com.elementwave.android.gcm.GCMBroadcastReceiverNotification"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.elementwave.android.gcm.NOTIFICATION_CLICKED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Start the Element Wave services when the boot is completed -->
+        <receiver android:name="com.elementwave.android.lifecycle.BootCompletedBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Necessary for Google play services NOT FROYO -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <!-- end Element Wave -->
+        <activity
+            android:name=".DeepLink"
+            android:label="@string/title_activity_deep_link" >
         </activity>
     </application>
 
