@@ -5,8 +5,6 @@ import com.adobe.mobile.Config;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 public class MainActivity extends Activity {
 
@@ -16,5 +14,11 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		Config.setContext(getApplicationContext());
 		Analytics.trackAction("Application Launched", null);
+	}
+	
+	@Override
+	protected void onResume(){
+		super.onResume();
+		Config.collectLifecycleData(this);
 	}
 }
