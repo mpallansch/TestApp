@@ -21,4 +21,9 @@ public class MainActivity extends Activity {
 		super.onResume();
 		Config.collectLifecycleData(this);
 	}
+	
+	@Override
+	public void onPause() {
+	    Config.pauseCollectingLifecycleData();
+	}
 }
